@@ -14,3 +14,13 @@ Escriba el resultado a la carpeta `output` de directorio de trabajo.
         >>> Escriba su respuesta a partir de este punto <<<
 */
 
+DROP TABLE IF EXISTS tabla_de_datos;
+
+CREATE TABLE tabla_datos (palabra STRING, fecha DATE, num INT)
+ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t';
+
+LOAD DATA LOCAL INPATH 'data.tsv' OVERWRITE INTO TABLE tabla_datos;
+
+INSERT OVERWRITE DIRECTORY 'output'
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+SELECT palabra, COUNT(palabra) AS freq FROM tabla_datos GROUP BY palabra;
