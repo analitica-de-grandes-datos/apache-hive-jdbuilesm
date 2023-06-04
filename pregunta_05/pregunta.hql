@@ -61,8 +61,8 @@ MAP KEYS TERMINATED BY '#'
 LINES TERMINATED BY '\n';
 LOAD DATA LOCAL INPATH 'data0.csv' INTO TABLE tbl0;
 
-CREATE TABLE contar_valores AS SELECT (YEAR(c4)) año, letter FROM tbl0 LATERAL VIEW explode(c5) letter_list as letter;
+CREATE TABLE count_value AS SELECT (YEAR(c4)) anual, letter FROM tbl0 LATERAL VIEW explode(c5) letter_list as letter;
 
 INSERT OVERWRITE LOCAL DIRECTORY './output'
 ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
-SELECT año, letter, COUNT(1) cant FROM contar_valores GROUP BY año, letter ORDER BY año, letter ASC;
+SELECT anual, letter, COUNT(1) cant FROM count_value GROUP BY anual, letter ORDER BY anual, letter ASC;
