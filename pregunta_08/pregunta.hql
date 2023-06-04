@@ -47,3 +47,23 @@ LOAD DATA LOCAL INPATH 'data1.csv' INTO TABLE tbl1;
     >>> Escriba su respuesta a partir de este punto <<<
 */
 
+DROP TABLE IF EXISTS xt;
+CREATE TABLE xt 
+AS 
+        SELECT 
+               c2 as palabra, 
+               num
+        FROM 
+                tbl0
+        LATERAL VIEW
+            explode(map_values(c6)) tbl0 as num;
+
+INSERT OVERWRITE LOCAL DIRECTORY './output'
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+SELECT 
+    palabra
+    sum(num)
+FROM 
+    xt
+GROUP BY
+    palabra
